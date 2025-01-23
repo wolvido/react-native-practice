@@ -1,16 +1,13 @@
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 import { Link } from 'expo-router';
 //import { useInput } from '../../hooks/index-hook'; // Import the custom hook
-import { useCart } from '../../../context/cart-context'; 
+import { CartContext } from '../../../context/cart-context'; 
+import { useContext } from 'react';
 
 //react component
 export default function HomeScreen() {
 
-    //const { value: inputValue, handleChange, handleSubmit } = useInput(""); //hook
-
-    //hook cart-context
-    const { addItem, handleSubmit } = useCart([]); //hook
-
+    const cartContext = useContext(CartContext);
     //dummy items
     const item1 = { id: 1, name: "Item 1", description: "Description for Item 1" };
     const item2 = { id: 2, name: "Item 2", description: "Description for Item 2" };

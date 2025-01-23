@@ -1,12 +1,13 @@
 import { View, Text, Button,StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import commonStyles from '../../../style/common'
-import { useCart } from '../../../context/cart-context'; 
+import { CartContext } from '../../../context/cart-context'; 
+import { useContext } from 'react';
 
 export default function OrderScreen() {
 
         //hook cart-context
-        const { addItem } = useCart([]); //hook
+        const cartContext = useContext(CartContext);
 
         //dummy items
         const item1 = { id: 1, name: "Item 1", description: "Description for Item 1" };
@@ -27,7 +28,7 @@ export default function OrderScreen() {
                             {item.name}
                         </Text>
                         
-                        <Button title="Add to Cart" onPress={() => addItem(item)} />
+                        <Button title="Add to Cart" onPress={() => cartContext.addItem(item)} />
 
                     </li>
                 ))}

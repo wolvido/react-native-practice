@@ -1,13 +1,14 @@
-import useCart from '@/context/cart-context';
+import { CartContext } from '../../../context/cart-context'; 
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { Item } from '@/models/item';
+import { useContext } from 'react';
 
 export default function CartScreen() {
 
     //hook cart-context
-    const { getItems, handleSubmit } = useCart([]); //hook
+    const cartContext = useContext(CartContext);
 
-    const items = getItems();
+    const items = cartContext.getItems();
 
     return (
         <View style={styles.main}>
@@ -23,7 +24,7 @@ export default function CartScreen() {
                 ))}
             </ul>
 
-            <Button title="Submit Cart" onPress={handleSubmit} />
+            <Button title="Submit Cart" onPress={cartContext.handleSubmit} />
 
         </View>
 
