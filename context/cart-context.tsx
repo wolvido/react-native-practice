@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { Cart } from '../models/cart';
 import { Item } from '../models/item';
 
-//cart context type
+//context type, its definition
 interface CartContextType {
     cart: Cart;
     addItem: (item: Item) => void;
@@ -18,10 +18,15 @@ export const CartContext = createContext<CartContextType>({
     getItems: () => []
 });
 
+//handles cart context so that it can be used in the layout easily
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
     const [cart, setCart] = useState(initialValue);
 
     const addItem = (item: Item) => {
+        //generate somewhat unique id
+        const id = cart.items.length + 1;
+        item.id = id;
+
         setCart((cart) => ({
             ...cart,
             items: [...cart.items, item],

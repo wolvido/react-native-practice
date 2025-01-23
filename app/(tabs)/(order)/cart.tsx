@@ -16,7 +16,7 @@ export default function CartScreen() {
 
             <ul style={styles.list}>
                 {items.map((item: Item) => (
-                    <li style={styles.item}>
+                    <li key={item.id} style={styles.item}>
                         <Text style={styles.item__name}>
                             {item.name}
                         </Text>
