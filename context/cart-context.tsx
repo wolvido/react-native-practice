@@ -1,19 +1,22 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { Cart } from '../models/cart';
-import { Item } from '../models/item';
+import { CartItem } from '../models/cart-item';
 
 //context type, its definition
 interface CartContextType {
-    cart: Cart;
-    addItem: (item: Item) => void;
+    //property contract
+    cart: Cart; 
+
+    //behaviour contract
+    addItemsByQuantity: (item: CartItem, quantity: number) => void;
     handleSubmit: () => Promise<void>;
-    getItems: () => Item[];
+    getItems: () => CartItem[];
 }
 
 //cart functionality context
 export const CartContext = createContext<CartContextType>({
-    cart: {items: [], id: 0},
-    addItem: (item: Item) => {},
+    cart: {cartItems: [], id: 0},
+    addItemsByQuantity: (item: CartItem, quantity: number) => {},
     handleSubmit: async () => {},
     getItems: () => []
 });
@@ -22,31 +25,49 @@ export const CartContext = createContext<CartContextType>({
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
     const [cart, setCart] = useState(initialValue);
 
-    const addItem = (item: Item) => {
-        //generate somewhat unique id
-        const id = cart.items.length + 1;
-        item.id = id;
+    const addItemsByQuantity = (cartItem: CartItem, quantity: number) => {
+        //grab the item id from the item in the cart item
+        const itemId = cartItem.item.id;
+        console.log(itemId);
 
-        setCart((cart) => ({
-            ...cart,
-            items: [...cart.items, item],
-        }));
-    };
+        const cartItems = cart.cartItems;
+
+        //grab the item ids from the cart items
+        const itemIds = cartItems.map((cartItem) => cartItem.item.id);
+
+        //check if the item id is in the list of item ids
+        const itemIndex = itemIds.indexOf(itemId);
+        if (itemIndex !== -1) {
+            //update the quantity of the item
+            const updatedCartItems = cart.cartItems.map((cartItem) => {
+                if (cartItem.item.id === itemId) {
+                    return { ...cartItem, quantity: Number(cartItem.quantity) + Number(quantity) };
+                }
+                return cartItem;
+            });
+
+            //set the cart with the updated cart items
+            setCart({ ...cart, cartItems: updatedCartItems });
+        } else {
+            //if the item is not in the cart, add the item to the cart
+            setCart({ ...cart, cartItems: [...cart.cartItems, { ...cartItem, quantity: quantity }] });
+        }
+    }
 
     const handleSubmit = async () => {
         console.log(cart);
     };
 
     const getItems = () => {
-        const itemList = cart.items.map((item) => {
-            return item;
+        const itemList = cart.cartItems.map((cartItems) => {
+            return cartItems;
         });
         return itemList;
     };
 
     const value = {
         cart: cart,
-        addItem: addItem,
+        addItemsByQuantity: addItemsByQuantity,
         handleSubmit: handleSubmit,
         getItems: getItems
     };

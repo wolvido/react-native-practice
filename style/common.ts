@@ -19,7 +19,7 @@ export default StyleSheet.create({
     button:{
         backgroundColor: 'blue',
         color: 'white',
-        fontSize: 5,
+        fontSize: 25,
     },
     item:{
         display: 'flex',
@@ -30,10 +30,30 @@ export default StyleSheet.create({
         borderTopColor: 'white',
         borderLeftColor: 'white',
         borderRightColor: 'white',
-        borderTopWidth: 0
-
+        borderTopWidth: 0,
+        borderBottomWidth: 1,
     },
     item__name:{
-        fontSize: 20,
+        fontSize: 15,
     },
+    title:{
+        fontSize: 23,
+    },
+    header:{
+        fontSize: 15,
+        fontWeight: 'bold'
+    },
+    tableHeader:{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 5,
+        width: '100%',
+        borderStyle: 'solid',
+        borderTopColor: 'white',
+        borderLeftColor: 'white',
+        borderRightColor: 'white',
+        borderTopWidth: 0,
+        borderBottomWidth: 1,
+    }
 });

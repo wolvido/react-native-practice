@@ -1,7 +1,8 @@
 import { CartContext } from '../../../context/cart-context'; 
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { Item } from '@/models/item';
+import { CartItem } from '@/models/cart-item';
 import { useContext } from 'react';
+import common from '@/style/common';
 
 export default function CartScreen() {
 
@@ -12,13 +13,21 @@ export default function CartScreen() {
 
     return (
         <View style={styles.main}>
-            <Text>Orders</Text>
+            <Text style={common.title}>Orders</Text>
 
             <ul style={styles.list}>
-                {items.map((item: Item) => (
-                    <li key={item.id} style={styles.item}>
+                {items.map((cartItem: CartItem) => (
+                    <li key={`${cartItem.id}-${Math.random()}`} style={styles.item}>
                         <Text style={styles.item__name}>
-                            {item.name}
+                            {cartItem.item.name}
+                        </Text>
+
+                        <Text>
+                            {cartItem.quantity}
+                        </Text>
+
+                        <Text>
+                            {cartItem.item.description}
                         </Text>
                     </li>
                 ))}
@@ -27,7 +36,6 @@ export default function CartScreen() {
             <Button title="Submit Cart" onPress={cartContext.handleSubmit} />
 
         </View>
-
     );
 }
 

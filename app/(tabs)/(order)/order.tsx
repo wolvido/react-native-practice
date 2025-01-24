@@ -3,53 +3,74 @@ import { Link } from 'expo-router';
 import commonStyles from '../../../style/common'
 import { CartContext } from '../../../context/cart-context'; 
 import { useContext } from 'react';
+import { InventoryContext } from '@/context/inventory-context';
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import { CartItem } from '@/models/cart-item';
 
 export default function OrderScreen() {
 
-        //hook cart-context
+        //hook contexts
         const cartContext = useContext(CartContext);
+        const inventoryContext = useContext(InventoryContext);
 
-        //dummy items
-        const item1 = { id: 1, name: "Item 1", description: "Description for Item 1" };
-        const item2 = { id: 2, name: "Item 2", description: "Description for Item 2" };
-        const item3 = { id: 3, name: "Item 3", description: "Description for Item 3" };
+        //grab available items from inventory
+        const inventoryItems = inventoryContext.getAllInventory();
 
-        const items = [item1, item2, item3];
+        const { control, getValues } = useForm();
 
     return (
         <View style={styles.main}>   
 
-            <Text>Cart Items</Text>
+            <Text style={commonStyles.title}>Cart Items</Text>
 
             <ul style={styles.list}>
-                {items.map((item) => (
-                    <li key={item.id} style={styles.item}>
+                {inventoryItems.map((inventory) => (
+                    <li key={`${inventory.id}-${Math.random()}`} style={styles.item}>
                         <Text style={styles.item__name}>
-                            {item.name}
+                            {inventory.item.name}
                         </Text>
-                        
-                        <Button title="Add to Cart" onPress={() => cartContext.addItem(item)} />
 
+                        <Text>
+                            {inventory.item.description}
+                        </Text>
+
+                        <Controller
+                            name={`quantity-${inventory.id}`}
+                            control={control}
+                            defaultValue={1}
+                            render={({ field }) => (
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
+                        />
+                        
+                        <Button title="Add to Cart" onPress={() => {
+                            const quantity = getValues(`quantity-${inventory.id}`);
+
+                            const cartItem: CartItem = {
+                                id: Math.random(),
+                                item: inventory.item,
+                                quantity: quantity
+                            };
+
+                            cartContext.addItemsByQuantity(cartItem, quantity);
+                        }} />
                     </li>
                 ))}
             </ul>
 
             {/* <Button title="Submit Cart" onPress={handleSubmit} /> */}
 
-            <Link href="/cart">Checkout</Link>
-
-            {/* <TextInput
-                style={styles.input}
-                placeholder="Enter something..."
-                value={inputValue}
-                onChangeText={handleChange} // Use the handler from the hook
-            /> */}
-
-
+            <Link style={commonStyles.button} href="/cart">Checkout</Link>
             
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     main: {
         display: 'flex',
@@ -65,11 +86,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         gap: 10,
         width: '100%'
-    },
-    button:{
-        backgroundColor: 'blue',
-        color: 'white',
-        fontSize: 5,
     },
     item:{
         display: 'flex',

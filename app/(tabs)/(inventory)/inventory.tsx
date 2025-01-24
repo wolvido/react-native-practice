@@ -1,17 +1,42 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import commonStyles from '../../../style/common';
+import { InventoryContext } from '@/context/inventory-context';
+import { useContext } from 'react';
+import { Link } from 'expo-router';
 
 export default function InventoryScreen() {
 
-    //dummy items
-    const item1 = { id: 1, name: "Item 1", description: "Description for Item 1" };
-    const item2 = { id: 2, name: "Item 2", description: "Description for Item 2" };
-    const item3 = { id: 3, name: "Item 3", description: "Description for Item 3" };
+    const inventoryContext = useContext(InventoryContext);
 
-    const items = [item1, item2, item3];
+    const inventoryItems = inventoryContext.getAllInventory();
 
     return (
-        <View style={styles.container}>
-            <Text>Inventory</Text>
+        <View style={commonStyles.main}>
+            <Text style={commonStyles.title}>Inventory</Text>
+
+            <View style={commonStyles.tableHeader}>
+                <Text style={commonStyles.header}>Name</Text>
+                <Text style={commonStyles.header}>Description</Text>
+                <Text style={commonStyles.header}>Quantity</Text>
+            </View>
+
+            <ul style={commonStyles.list}>
+            {inventoryItems.map((inventory) => (
+                <li key={inventory.id} style={commonStyles.item}>
+                <Text style={commonStyles.item__name}>
+                    {inventory.item.name}
+                </Text>
+                <Text>
+                    {inventory.item.description}
+                </Text>
+                <Text>
+                    quantity: {inventory.quantity}
+                </Text>
+                </li>
+            ))}
+            </ul>
+
+            <Link style={commonStyles.button} href="/create-item">Create Item</Link>
         </View>
     );
 }
