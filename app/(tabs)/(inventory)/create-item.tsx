@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { useContext } from "react";
 import { InventoryContext } from "@/context/inventory-context";
 import { Inventory } from "@/models/inventory";
+import { Item } from "@/models/item";
 
 export default function CreateItemScreen(){
 
@@ -14,20 +15,34 @@ export default function CreateItemScreen(){
 
     //submit function
     const onSubmit: SubmitHandler<Inventory> = (inventory) => {
+
+        const newItem: Item = {
+            id: Math.floor(Math.random() * 100000),
+            name: inventory.item.name,
+            description: inventory.item.description,
+        };
+
         const newInventory: Inventory = {
             id: Math.floor(Math.random() * 100000),
-            item: inventory.item,
-            quantity: 0
+            item: newItem,
+            quantity: inventory.quantity
         }
 
-        const quantity : number = 0;
         inventoryContext.addInvetoryByQuantity(newInventory);
+        console.log(inventoryContext.getAllInventory());
     }
 
     return (
         <View style={commonStyles.main}>
-
-
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <label>Item Name:</label>
+                <input {...register("item.name")} type="text" required/>
+                <label>Item Description:</label>
+                <input {...register("item.description")} type="text" required/>
+                <label>Item Quantity:</label>
+                <input {...register("quantity")} type="number" required/>
+                <button type="submit">Submit</button>
+            </form>
         </View>
     );
 }
