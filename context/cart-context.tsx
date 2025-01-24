@@ -25,12 +25,12 @@ export const CartContext = createContext<CartContextType>({
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
     const [cart, setCart] = useState(initialValue);
 
-    const updateCartQuantity = (cartItem: CartItem) => {
+    const updateCartQuantity = (cartItem: CartItem, newQuantity: number) => {
         const itemId = cartItem.item.id;
 
         const updatedCartItems = cart.cartItems.map((cartItem) => {
             if (cartItem.item.id === itemId) {
-                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(cartItem.quantity) };
+                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(newQuantity) };
             }
             return cartItem;
         });
@@ -45,7 +45,7 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
         const itemIndex = itemIds.indexOf(itemId);
 
         if (itemIndex !== -1) {
-            const updatedCartItems = updateCartQuantity(cartItem);
+            const updatedCartItems = updateCartQuantity(cart.cartItems[itemIndex] , cartItem.quantity);
             setCart({ ...cart, cartItems: updatedCartItems });
         } else {
             //if the item is not in the cart, add the item to the cart

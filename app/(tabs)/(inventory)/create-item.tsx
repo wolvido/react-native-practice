@@ -21,8 +21,7 @@ export default function CreateItemScreen(){
         }
 
         const quantity : number = 0;
-
-        inventoryContext.addInvetoryByQuantity(newInventory, quantity);
+        inventoryContext.addInvetoryByQuantity(newInventory);
     }
 
     return (

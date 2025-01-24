@@ -4,8 +4,7 @@ import { Inventory } from '../models/inventory';
 //context definition
 interface InventoryContextType {
     items: Inventory[];
-    addInventoryItem: (inventory: Inventory) => void;
-    addInvetoryByQuantity: (inventory: Inventory, quantity: number) => void;
+    addInvetoryByQuantity: (inventory: Inventory) => void;
     getAllInventory: () => Inventory[];
     reduceInventory: (id: number, quantity: number) => void;
 };
@@ -13,8 +12,7 @@ interface InventoryContextType {
 //inventory context
 export const InventoryContext = createContext<InventoryContextType>({
     items: [],
-    addInventoryItem: (inventory: Inventory) => {},
-    addInvetoryByQuantity: (inventory: Inventory, quantity: number) => {},
+    addInvetoryByQuantity: (inventory: Inventory) => {},
     getAllInventory: () => [],
     reduceInventory: (id: number, quantity: number) => {},
 });
@@ -22,16 +20,12 @@ export const InventoryContext = createContext<InventoryContextType>({
 function InventoryContextProvider({children, initialDatabase}: {children: React.ReactNode, initialDatabase: Inventory[]}) {
     const [database, setDatabase] = useState<Inventory[]>(initialDatabase);
 
-    const addInventoryItem = (inventory: Inventory) => {
-        setDatabase([...database, inventory]);
-    }
-
-    const updateInventoryQuantity = (inventory: Inventory, quantity: number) => {
+    const updateInventoryQuantity = (inventory: Inventory, newQuantity: number) => {
         const itemId = inventory.item.id;
 
         const updatedInventoryItems = database.map((inventory) => {
             if (inventory.item.id === itemId) {
-                return { ...inventory, quantity: Number(inventory.quantity) + Number(quantity) };
+                return { ...inventory, quantity: Number(inventory.quantity) + Number(newQuantity)};
             }
             return inventory;
         });
@@ -39,18 +33,18 @@ function InventoryContextProvider({children, initialDatabase}: {children: React.
         return updatedInventoryItems; //returns Inventory with updated quantity
     }
 
-    const addInvetoryByQuantity = (inventory: Inventory, quantity: number) => {
+    const addInvetoryByQuantity = (inventory: Inventory) => {
         const itemId = inventory.item.id;
         const databaseItems = database;
         const itemIds = databaseItems.map((inventory) => inventory.item.id);
         const itemIndex = itemIds.indexOf(itemId);
 
         if (itemIndex !== -1) {
-            const updatedInventoryQuantity = updateInventoryQuantity(inventory, quantity);
+            const updatedInventoryQuantity = updateInventoryQuantity(database[itemIndex], inventory.quantity);
 
             setDatabase(updatedInventoryQuantity);
         } else {
-            setDatabase([...database, { ...inventory, quantity: quantity }]);
+            setDatabase([...database, { ...inventory}]);
         }
     }
 
@@ -67,7 +61,6 @@ function InventoryContextProvider({children, initialDatabase}: {children: React.
 
     const value = {
         items: database,
-        addInventoryItem: addInventoryItem,
         addInvetoryByQuantity: addInvetoryByQuantity,
         getAllInventory: getAllInventory,
         reduceInventory: reduceInventory,
