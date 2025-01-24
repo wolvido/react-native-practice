@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { Cart } from '../models/cart';
 import { CartItem } from '../models/cart-item';
+import { InventoryContext } from './inventory-context';
 
 //context type, its definition
 interface CartContextType {
@@ -21,8 +22,14 @@ export const CartContext = createContext<CartContextType>({
     getItems: () => []
 });
 
+
+
 //handles cart context so that it can be used in the layout easily
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
+
+    //coupled with inventory context, need to decoupe later when app gets larger
+    const inventoryContext = useContext(InventoryContext);
+
     const [cart, setCart] = useState(initialValue);
 
     const updateCartQuantity = (cartItem: CartItem, newQuantity: number) => {
@@ -56,6 +63,8 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
     const handleSubmit = async () => {
         console.log(cart);
         setCart({cartItems: [], id: 0});
+
+        inventoryContext.reduceInventory(cart);
     };
 
     const getItems = () => {

@@ -11,7 +11,7 @@ export default function TabLayout() {
             options={{
                 title: 'Home',
                 href: '/(tabs)/(home)',
-                headerStyle: { 
+                headerStyle: {
                 backgroundColor: 'lightblue'
             },
             }}
