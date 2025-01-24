@@ -57,7 +57,7 @@ export default function OrderScreen() {
                                 quantity: quantity
                             };
 
-                            cartContext.addItemsByQuantity(cartItem, quantity);
+                            cartContext.addItemsByQuantity(cartItem);
                         }} />
                     </li>
                 ))}

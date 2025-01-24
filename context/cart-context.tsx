@@ -8,7 +8,7 @@ interface CartContextType {
     cart: Cart; 
 
     //behaviour contract
-    addItemsByQuantity: (item: CartItem, quantity: number) => void;
+    addItemsByQuantity: (item: CartItem) => void;
     handleSubmit: () => Promise<void>;
     getItems: () => CartItem[];
 }
@@ -16,7 +16,7 @@ interface CartContextType {
 //cart functionality context
 export const CartContext = createContext<CartContextType>({
     cart: {cartItems: [], id: 0},
-    addItemsByQuantity: (item: CartItem, quantity: number) => {},
+    addItemsByQuantity: (item: CartItem) => {},
     handleSubmit: async () => {},
     getItems: () => []
 });
@@ -25,12 +25,12 @@ export const CartContext = createContext<CartContextType>({
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
     const [cart, setCart] = useState(initialValue);
 
-    const updateCartQuantity = (cartItem: CartItem, quantity: number) => {
+    const updateCartQuantity = (cartItem: CartItem) => {
         const itemId = cartItem.item.id;
 
         const updatedCartItems = cart.cartItems.map((cartItem) => {
             if (cartItem.item.id === itemId) {
-                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(quantity) };
+                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(cartItem.quantity) };
             }
             return cartItem;
         });
@@ -38,18 +38,18 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
         return updatedCartItems;
     }
 
-    const addItemsByQuantity = (cartItem: CartItem, quantity: number) => {
+    const addItemsByQuantity = (cartItem: CartItem) => {
         const itemId = cartItem.item.id;
         const cartItems = cart.cartItems;
         const itemIds = cartItems.map((cartItem) => cartItem.item.id);
         const itemIndex = itemIds.indexOf(itemId);
 
         if (itemIndex !== -1) {
-            const updatedCartItems = updateCartQuantity(cartItem, quantity);
+            const updatedCartItems = updateCartQuantity(cartItem);
             setCart({ ...cart, cartItems: updatedCartItems });
         } else {
             //if the item is not in the cart, add the item to the cart
-            setCart({ ...cart, cartItems: [...cart.cartItems, { ...cartItem, quantity: quantity }] });
+            setCart({ ...cart, cartItems: [...cart.cartItems, { ...cartItem }] });
         }
     }
 
