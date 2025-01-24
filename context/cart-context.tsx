@@ -25,28 +25,27 @@ export const CartContext = createContext<CartContextType>({
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
     const [cart, setCart] = useState(initialValue);
 
-    const addItemsByQuantity = (cartItem: CartItem, quantity: number) => {
-        //grab the item id from the item in the cart item
+    const updateCartQuantity = (cartItem: CartItem, quantity: number) => {
         const itemId = cartItem.item.id;
-        console.log(itemId);
 
+        const updatedCartItems = cart.cartItems.map((cartItem) => {
+            if (cartItem.item.id === itemId) {
+                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(quantity) };
+            }
+            return cartItem;
+        });
+
+        return updatedCartItems;
+    }
+
+    const addItemsByQuantity = (cartItem: CartItem, quantity: number) => {
+        const itemId = cartItem.item.id;
         const cartItems = cart.cartItems;
-
-        //grab the item ids from the cart items
         const itemIds = cartItems.map((cartItem) => cartItem.item.id);
-
-        //check if the item id is in the list of item ids
         const itemIndex = itemIds.indexOf(itemId);
-        if (itemIndex !== -1) {
-            //update the quantity of the item
-            const updatedCartItems = cart.cartItems.map((cartItem) => {
-                if (cartItem.item.id === itemId) {
-                    return { ...cartItem, quantity: Number(cartItem.quantity) + Number(quantity) };
-                }
-                return cartItem;
-            });
 
-            //set the cart with the updated cart items
+        if (itemIndex !== -1) {
+            const updatedCartItems = updateCartQuantity(cartItem, quantity);
             setCart({ ...cart, cartItems: updatedCartItems });
         } else {
             //if the item is not in the cart, add the item to the cart
@@ -56,6 +55,7 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
 
     const handleSubmit = async () => {
         console.log(cart);
+        setCart({cartItems: [], id: 0});
     };
 
     const getItems = () => {
