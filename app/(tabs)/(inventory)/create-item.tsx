@@ -5,11 +5,14 @@ import { useContext } from "react";
 import { InventoryContext } from "@/context/inventory-context";
 import { Inventory } from "@/models/inventory";
 import { Item } from "@/models/item";
+import { Link, useRouter } from "expo-router";
 
 export default function CreateItemScreen(){
 
     const inventoryContext = useContext(InventoryContext);
+    const router = useRouter();
 
+    //initialize react-hook-form using Inventory model
     //initialize react-hook-form using Inventory model
     const { register, handleSubmit } = useForm<Inventory>();
 
@@ -29,7 +32,7 @@ export default function CreateItemScreen(){
         }
 
         inventoryContext.addInvetoryByQuantity(newInventory);
-        console.log(inventoryContext.getAllInventory());
+        router.push("/inventory"); 
     }
 
     return (
@@ -41,7 +44,11 @@ export default function CreateItemScreen(){
                 <input {...register("item.description")} type="text" required/>
                 <label>Item Quantity:</label>
                 <input {...register("quantity")} type="number" required/>
-                <button type="submit">Submit</button>
+
+                
+                <button style={commonStyles.button} type="submit">Submit</button>
+                
+                
             </form>
         </View>
     );
