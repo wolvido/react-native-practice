@@ -20,21 +20,21 @@ export default function InventoryScreen() {
                 <Text style={commonStyles.header}>Quantity</Text>
             </View>
 
-            <ul style={commonStyles.list}>
+            <View style={commonStyles.list}>
             {inventoryItems.map((inventory) => (
-                <li key={inventory.id} style={commonStyles.item}>
-                <Text style={commonStyles.item__name}>
-                    {inventory.item.name}
-                </Text>
-                <Text>
-                    {inventory.item.description}
-                </Text>
-                <Text>
-                    quantity: {inventory.quantity}
-                </Text>
-                </li>
+                <View key={inventory.id} style={commonStyles.item}>
+                    <Text style={commonStyles.item__name}>
+                        {inventory.item.name}
+                    </Text>
+                    <Text>
+                        {inventory.item.description}
+                    </Text>
+                    <Text>
+                        quantity: {inventory.quantity}
+                    </Text>
+                </View>
             ))}
-            </ul>
+            </View>
 
             <Link style={commonStyles.button} href="/create-item">Create Item</Link>
         </View>

@@ -1,11 +1,11 @@
-import { View } from "react-native";
+import { View, Text, TextInput, Button } from "react-native";
 import commonStyles from '../../../style/common';
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { useContext } from "react";
 import { InventoryContext } from "@/context/inventory-context";
 import { Inventory } from "@/models/inventory";
 import { Item } from "@/models/item";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function CreateItemScreen(){
 
@@ -14,7 +14,7 @@ export default function CreateItemScreen(){
 
     //initialize react-hook-form using Inventory model
     //initialize react-hook-form using Inventory model
-    const { register, handleSubmit } = useForm<Inventory>();
+    const { register, handleSubmit, control } = useForm<Inventory>();
 
     //submit function
     const onSubmit: SubmitHandler<Inventory> = (inventory) => {
@@ -33,23 +33,60 @@ export default function CreateItemScreen(){
 
         inventoryContext.addInvetoryByQuantity(newInventory);
         router.push("/inventory"); 
+        console.log(inventory);
     }
 
     return (
         <View style={commonStyles.main}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Item Name:</label>
-                <input {...register("item.name")} type="text" required/>
-                <label>Item Description:</label>
-                <input {...register("item.description")} type="text" required/>
-                <label>Item Quantity:</label>
-                <input {...register("quantity")} type="number" required/>
+            <View>
+                <Text>Item Name:</Text>
+                <Controller
+                    name="item.name"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={commonStyles.input}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
+                />
 
+                <Text>Item Description:</Text>
+                <Controller
+                    name="item.description"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={commonStyles.input}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                        />
+                    )}
+                />
+
+                <Text>Item Quantity:</Text>
+                <Controller
+                    name="quantity"
+                    control={control}
+                    defaultValue={1}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            keyboardType="numeric"
+                            style={commonStyles.input}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value.toString()}
+                        />
+                    )}
+                />
                 
-                <button style={commonStyles.button} type="submit">Submit</button>
-                
-                
-            </form>
+                <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+            </View>
         </View>
     );
 }

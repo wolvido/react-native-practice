@@ -15,9 +15,9 @@ export default function CartScreen() {
         <View style={styles.main}>
             <Text style={common.title}>Orders</Text>
 
-            <ul style={styles.list}>
+            <View style={styles.list}>
                 {items.map((cartItem: CartItem) => (
-                    <li key={`${cartItem.id}-${Math.random()}`} style={styles.item}>
+                    <View key={`${cartItem.id}-${Math.random()}`} style={styles.item}>
                         <Text style={styles.item__name}>
                             {cartItem.item.name}
                         </Text>
@@ -29,9 +29,9 @@ export default function CartScreen() {
                         <Text>
                             {cartItem.item.description}
                         </Text>
-                    </li>
+                    </View>
                 ))}
-            </ul>
+            </View>
 
             <Button title="Submit Cart" onPress={cartContext.handleSubmit} />
 

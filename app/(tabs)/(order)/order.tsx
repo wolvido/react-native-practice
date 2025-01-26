@@ -1,31 +1,31 @@
-import { View, Text, Button,StyleSheet } from 'react-native';
+import { View, Text, Button,StyleSheet, TextInput } from 'react-native';
 import { Link } from 'expo-router';
 import commonStyles from '../../../style/common'
 import { CartContext } from '../../../context/cart-context'; 
 import { useContext } from 'react';
 import { InventoryContext } from '@/context/inventory-context';
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { CartItem } from '@/models/cart-item';
 
 export default function OrderScreen() {
 
-        //hook contexts
-        const cartContext = useContext(CartContext);
-        const inventoryContext = useContext(InventoryContext);
+    //hook contexts
+    const cartContext = useContext(CartContext);
+    const inventoryContext = useContext(InventoryContext);
 
-        //grab available items from inventory
-        const inventoryItems = inventoryContext.getAllInventory();
+    //grab available items from inventory
+    const inventoryItems = inventoryContext.getAllInventory();
 
-        const { control, getValues } = useForm();
+    const { control, getValues } = useForm();
 
     return (
         <View style={styles.main}>   
 
             <Text style={commonStyles.title}>Cart Items</Text>
 
-            <ul style={styles.list}>
+            <View style={styles.list}>
                 {inventoryItems.map((inventory) => (
-                    <li key={`${inventory.id}-${Math.random()}`} style={styles.item}>
+                    <View key={`${inventory.id}-${Math.random()}`} style={styles.item}>
                         <Text style={styles.item__name}>
                             {inventory.item.name}
                         </Text>
@@ -39,11 +39,11 @@ export default function OrderScreen() {
                             control={control}
                             defaultValue={1}
                             render={({ field }) => (
-                                <input
-                                    type="number"
-                                    min="1"
-                                    value={field.value}
-                                    onChange={field.onChange}
+                                <TextInput
+                                    style = {commonStyles.input}
+                                    keyboardType="numeric"
+                                    value={field.value.toString()}
+                                    onChangeText={field.onChange}
                                 />
                             )}
                         />
@@ -59,9 +59,9 @@ export default function OrderScreen() {
 
                             cartContext.addItemsByQuantity(cartItem);
                         }} />
-                    </li>
+                    </View>
                 ))}
-            </ul>
+            </View>
 
             {/* <Button title="Submit Cart" onPress={handleSubmit} /> */}
 

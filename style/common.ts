@@ -55,5 +55,12 @@ export default StyleSheet.create({
         borderRightColor: 'white',
         borderTopWidth: 0,
         borderBottomWidth: 1,
-    }
+    },
+    input:{
+        width: 100,
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        padding: 5,
+    },
 });
