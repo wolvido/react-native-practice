@@ -13,7 +13,7 @@ export default function CartScreen() {
 
     return (
         <View style={styles.main}>
-            <Text style={common.title}>Orders</Text>
+            <Text style={common.title}>Order</Text>
 
             <View style={styles.list}>
                 {items.map((cartItem: CartItem) => (

@@ -12,14 +12,16 @@ interface CartContextType {
     addItemsByQuantity: (item: CartItem) => void;
     handleSubmit: () => Promise<void>;
     getItems: () => CartItem[];
+    setOrder: (order: Cart) => void;
 }
 
 //cart functionality context
 export const CartContext = createContext<CartContextType>({
-    cart: {cartItems: [], id: 0},
+    cart: {cartItems: [], cashier:"", id: 0},
     addItemsByQuantity: (item: CartItem) => {},
     handleSubmit: async () => {},
-    getItems: () => []
+    getItems: () => [],
+    setOrder: (order: Cart) => {}
 });
 
 
@@ -62,10 +64,15 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
 
     const handleSubmit = async () => {
         console.log(cart);
-        setCart({cartItems: [], id: 0});
-
         inventoryContext.reduceInventory(cart);
+
+        //reset cart
+        setCart({cartItems: [], cashier:"", id: 0});
     };
+
+    const setOrder = (order: Cart) => {
+        setCart(order);
+    }
 
     const getItems = () => {
         const itemList = cart.cartItems.map((cartItems) => {
@@ -78,7 +85,8 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
         cart: cart,
         addItemsByQuantity: addItemsByQuantity,
         handleSubmit: handleSubmit,
-        getItems: getItems
+        getItems: getItems,
+        setOrder: setOrder
     };
 
     return (

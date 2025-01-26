@@ -13,7 +13,6 @@ export default function CreateItemScreen(){
     const router = useRouter();
 
     //initialize react-hook-form using Inventory model
-    //initialize react-hook-form using Inventory model
     const { register, handleSubmit, control } = useForm<Inventory>();
 
     //submit function
@@ -29,10 +28,10 @@ export default function CreateItemScreen(){
             id: Math.floor(Math.random() * 100000),
             item: newItem,
             quantity: inventory.quantity
-        }
+        };
 
         inventoryContext.addInvetoryByQuantity(newInventory);
-        router.push("/inventory"); 
+        router.push("/inventory");
         console.log(inventory);
     }
 

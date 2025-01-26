@@ -63,4 +63,10 @@ export default StyleSheet.create({
         borderWidth: 1,
         padding: 5,
     },
+    inputGroup:{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 5,
+    },
+
 });

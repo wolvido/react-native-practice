@@ -1,71 +1,60 @@
 import { View, Text, Button,StyleSheet, TextInput } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import commonStyles from '../../../style/common'
 import { CartContext } from '../../../context/cart-context'; 
 import { useContext } from 'react';
 import { InventoryContext } from '@/context/inventory-context';
-import { useForm, Controller } from "react-hook-form"
-import { CartItem } from '@/models/cart-item';
+import { useForm, Controller, SubmitHandler } from "react-hook-form"
+import { Cart } from '@/models/cart';
 
 export default function OrderScreen() {
 
     //hook contexts
     const cartContext = useContext(CartContext);
-    const inventoryContext = useContext(InventoryContext);
 
-    //grab available items from inventory
-    const inventoryItems = inventoryContext.getAllInventory();
+    const router = useRouter();
 
-    const { control, getValues } = useForm();
+    const { register, handleSubmit, control } = useForm<Cart>();
+
+    //on submit
+    const onSubmit: SubmitHandler<Cart> = (cart) => {
+
+        const order: Cart = {
+            id: 0,
+            cartItems: cartContext.getItems(),
+            cashier: cart.cashier
+        };
+
+        console.log(order);
+        
+        cartContext.setOrder(order);
+        
+        router.push("/item-list");
+    }
 
     return (
         <View style={styles.main}>   
 
-            <Text style={commonStyles.title}>Cart Items</Text>
-
-            <View style={styles.list}>
-                {inventoryItems.map((inventory) => (
-                    <View key={`${inventory.id}-${Math.random()}`} style={styles.item}>
-                        <Text style={styles.item__name}>
-                            {inventory.item.name}
-                        </Text>
-
-                        <Text>
-                            {inventory.item.description}
-                        </Text>
-
-                        <Controller
-                            name={`quantity-${inventory.id}`}
-                            control={control}
-                            defaultValue={1}
-                            render={({ field }) => (
-                                <TextInput
-                                    style = {commonStyles.input}
-                                    keyboardType="numeric"
-                                    value={field.value.toString()}
-                                    onChangeText={field.onChange}
-                                />
-                            )}
-                        />
-                        
-                        <Button title="Add to Cart" onPress={() => {
-                            const quantity = getValues(`quantity-${inventory.id}`);
-
-                            const cartItem: CartItem = {
-                                id: Math.random(),
-                                item: inventory.item,
-                                quantity: quantity
-                            };
-
-                            cartContext.addItemsByQuantity(cartItem);
-                        }} />
-                    </View>
-                ))}
-            </View>
-
             {/* <Button title="Submit Cart" onPress={handleSubmit} /> */}
 
-            <Link style={commonStyles.button} href="/cart">Checkout</Link>
+            <Text style={commonStyles.title}>Order</Text>
+            <View style={commonStyles.inputGroup}>
+                <Text>Cashier:</Text>
+                <Controller
+                    name="cashier"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                        <TextInput
+                            style = {commonStyles.input}
+                            value={field.value}
+                            onChangeText={field.onChange}
+                        />
+                    )}
+                />
+            </View>
+
+            <Button title="Item List" onPress={handleSubmit(onSubmit)} />
             
         </View>
     );
