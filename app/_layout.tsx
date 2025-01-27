@@ -4,6 +4,7 @@ import { Inventory } from '@/models/inventory';
 import InventoryContextProvider from '@/context/inventory-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SupplyOrderContextProvider, { SupplyOrderContext } from '@/context/supply-order-context';
 
 export default function RootLayout() {
 
@@ -21,21 +22,25 @@ export default function RootLayout() {
 
     return (
         <InventoryContextProvider initialDatabase={dummyInventoryDb}>
-        <CartContextProvider initialValue={{ cartItems: [], id: 0 }}>
-                    <Stack
-                        screenOptions={{
-                        headerStyle: {
-                            backgroundColor: 'green'
-                        },
-                        headerTintColor: '#fff',
-                        headerShown: false,
-                        headerTitleStyle: {
-                            fontWeight: 'bold',
-                        },
-                        }}>
-                        {/* <Stack.Screen name="(home)" options={{ title: "Home" }}/> */}
-                    </Stack>
+        <SupplyOrderContextProvider initialValue={{id: 0, supplier: "", supplyOrderItems: []}}>    
+        <CartContextProvider initialValue={{ cartItems: [], cashier: "", id: 0 }}>
+
+            <Stack
+                screenOptions={{
+                headerStyle: {
+                    backgroundColor: 'green'
+                },
+                headerTintColor: '#fff',
+                headerShown: false,
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+                }}>
+                {/* <Stack.Screen name="(home)" options={{ title: "Home" }}/> */}
+            </Stack>
+
         </CartContextProvider>
+        </SupplyOrderContextProvider>
         </InventoryContextProvider>
     );
 }

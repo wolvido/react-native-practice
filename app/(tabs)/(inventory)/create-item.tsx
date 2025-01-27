@@ -27,7 +27,7 @@ export default function CreateItemScreen(){
         const newInventory: Inventory = {
             id: Math.floor(Math.random() * 100000),
             item: newItem,
-            quantity: inventory.quantity
+            quantity: inventory.quantity ?? 0
         };
 
         inventoryContext.addInvetoryByQuantity(newInventory);
@@ -68,7 +68,7 @@ export default function CreateItemScreen(){
                     )}
                 />
 
-                <Text>Item Quantity:</Text>
+                {/* <Text>Item Quantity:</Text>
                 <Controller
                     name="quantity"
                     control={control}
@@ -82,7 +82,7 @@ export default function CreateItemScreen(){
                             value={value.toString()}
                         />
                     )}
-                />
+                /> */}
                 
                 <Button title="Submit" onPress={handleSubmit(onSubmit)} />
             </View>

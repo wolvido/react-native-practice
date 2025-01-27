@@ -24,8 +24,6 @@ export const CartContext = createContext<CartContextType>({
     setOrder: (order: Cart) => {}
 });
 
-
-
 //handles cart context so that it can be used in the layout easily
 function CartContextProvider({initialValue, children}: {initialValue: Cart, children: ReactNode}) {
 
@@ -45,7 +43,7 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
         });
 
         return updatedCartItems;
-    }
+    };
 
     const addItemsByQuantity = (cartItem: CartItem) => {
         const itemId = cartItem.item.id;
@@ -60,7 +58,7 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
             //if the item is not in the cart, add the item to the cart
             setCart({ ...cart, cartItems: [...cart.cartItems, { ...cartItem }] });
         }
-    }
+    };
 
     const handleSubmit = async () => {
         console.log(cart);
@@ -72,7 +70,7 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
 
     const setOrder = (order: Cart) => {
         setCart(order);
-    }
+    };
 
     const getItems = () => {
         const itemList = cart.cartItems.map((cartItems) => {

@@ -26,9 +26,7 @@ export default function OrderScreen() {
         };
 
         console.log(order);
-        
         cartContext.setOrder(order);
-        
         router.push("/item-list");
     }
 

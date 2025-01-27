@@ -18,17 +18,6 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
-            name="(details)"
-            options={{
-                title: 'Details',
-                href: "/(tabs)/(details)/details",
-                headerStyle: { 
-                backgroundColor: 'lightgreen'
-            },
-        }}
-        />
-
-        <Tabs.Screen
             name="(inventory)"
             options={{
                 title: 'Inventory',
@@ -46,6 +35,17 @@ export default function TabLayout() {
                 href: "/(tabs)/(order)/order",
                 headerStyle: { 
                     backgroundColor: 'lightpink'
+                    },
+        }}
+        />
+
+        <Tabs.Screen
+            name="(supply-order)"
+            options={{
+                title: 'Supply Order',
+                href: "/(tabs)/(supply-order)/supply-order",
+                headerStyle: { 
+                    backgroundColor: 'lightyellow'
                     },
         }}
         />
