@@ -11,9 +11,9 @@ export default function RootLayout() {
     const StackNative = createNativeStackNavigator();
 
     //dummy inventory database
-    const item1 = {id: 1, name: 'Heinz Ketchup', description: "ketchup tomato"}
-    const item2 = {id: 2, name: 'Parsely Dried', description: "spices something something"}
-    const item3 = {id: 3, name: 'Item 3', description: "description3"}
+    const item1 = {id: 1, name: 'Heinz Ketchup', description: "ketchup tomato", price: 10}
+    const item2 = {id: 2, name: 'Parsely Dried', description: "spices something something", price: 5}
+    const item3 = {id: 3, name: 'Item 3', description: "description3", price: 15}
     const dummyInventoryDb: Inventory[] = [
         {id: 1, item: item1, quantity: 10},
         {id: 2, item: item2, quantity: 20},
@@ -23,7 +23,7 @@ export default function RootLayout() {
     return (
         <InventoryContextProvider initialDatabase={dummyInventoryDb}>
         <SupplyOrderContextProvider initialValue={{id: 0, supplier: "", supplyOrderItems: []}}>    
-        <CartContextProvider initialValue={{ cartItems: [], cashier: "", id: 0 }}>
+        <CartContextProvider initialValue={{ cartItems: [], cashier: "", id: 0, total: 0 }}>
 
             <Stack
                 screenOptions={{

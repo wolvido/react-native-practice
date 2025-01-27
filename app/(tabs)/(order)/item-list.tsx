@@ -23,6 +23,15 @@ export default function OrderScreen() {
 
             <Text style={commonStyles.title}>Cart Items</Text>
 
+            <View style={commonStyles.tableHeader}>
+                <Text style={commonStyles.header}>Name</Text>
+                <Text style={commonStyles.header}>Description</Text>
+                <Text style={commonStyles.header}>Price</Text>
+                <Text style={commonStyles.header}>Quantity</Text>
+                <Text style={commonStyles.header}>Add to Cart</Text>
+
+            </View>
+
             <View style={commonStyles.list}>
                 {inventoryItems.map((inventory) => (
                     <View key={`${inventory.id}-${Math.random()}`} style={commonStyles.item}>
@@ -32,6 +41,10 @@ export default function OrderScreen() {
 
                         <Text>
                             {inventory.item.description}
+                        </Text>
+
+                        <Text>
+                            {inventory.item.price}
                         </Text>
 
                         <Controller
@@ -54,8 +67,12 @@ export default function OrderScreen() {
                             const cartItem: CartItem = {
                                 id: Math.random(),
                                 item: inventory.item,
-                                quantity: quantity
+                                quantity: quantity,
+                                total: inventory.item.price * quantity
                             };
+
+                            // console.log("onPress:");
+                            // console.log(cartItem);
 
                             cartContext.addItemsByQuantity(cartItem);
                         }} />

@@ -29,6 +29,10 @@ export default function CartScreen() {
                         <Text>
                             {cartItem.item.description}
                         </Text>
+
+                        <Text>
+                            {cartItem.total}
+                        </Text>
                     </View>
                 ))}
             </View>

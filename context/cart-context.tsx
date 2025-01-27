@@ -5,10 +5,7 @@ import { InventoryContext } from './inventory-context';
 
 //context type, its definition
 interface CartContextType {
-    //property contract
     cart: Cart; 
-
-    //behaviour contract
     addItemsByQuantity: (item: CartItem) => void;
     handleSubmit: () => Promise<void>;
     getItems: () => CartItem[];
@@ -17,7 +14,7 @@ interface CartContextType {
 
 //cart functionality context
 export const CartContext = createContext<CartContextType>({
-    cart: {cartItems: [], cashier:"", id: 0},
+    cart: {cartItems: [], cashier:"", id: 0, total: 0},
     addItemsByQuantity: (item: CartItem) => {},
     handleSubmit: async () => {},
     getItems: () => [],
@@ -32,12 +29,12 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
 
     const [cart, setCart] = useState(initialValue);
 
-    const updateCartQuantity = (cartItem: CartItem, newQuantity: number) => {
+    const RecalculateCart = (cartItem: CartItem, newQuantity: number) => {
         const itemId = cartItem.item.id;
 
         const updatedCartItems = cart.cartItems.map((cartItem) => {
             if (cartItem.item.id === itemId) {
-                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(newQuantity) };
+                return { ...cartItem, quantity: Number(cartItem.quantity) + Number(newQuantity), total: Number(cartItem.item.price) * (Number(cartItem.quantity) + Number(newQuantity)) };
             }
             return cartItem;
         });
@@ -46,38 +43,39 @@ function CartContextProvider({initialValue, children}: {initialValue: Cart, chil
     };
 
     const addItemsByQuantity = (cartItem: CartItem) => {
+        //get the item id from the cart item
         const itemId = cartItem.item.id;
+        //get the cart items from the cart
         const cartItems = cart.cartItems;
+        //get the item ids from the cart items
         const itemIds = cartItems.map((cartItem) => cartItem.item.id);
+        //get the index of the item in the cart
         const itemIndex = itemIds.indexOf(itemId);
 
+        let updatedCartItems;
+        //if the item is in the cart, update the quantity
         if (itemIndex !== -1) {
-            const updatedCartItems = updateCartQuantity(cart.cartItems[itemIndex] , cartItem.quantity);
-            setCart({ ...cart, cartItems: updatedCartItems });
+            updatedCartItems = RecalculateCart(cart.cartItems[itemIndex], cartItem.quantity);
         } else {
             //if the item is not in the cart, add the item to the cart
-            setCart({ ...cart, cartItems: [...cart.cartItems, { ...cartItem }] });
+            updatedCartItems = [...cart.cartItems, { ...cartItem }];
         }
+
+        setCart({ ...cart, cartItems: updatedCartItems });
     };
 
     const handleSubmit = async () => {
-        console.log(cart);
         inventoryContext.reduceInventory(cart);
 
         //reset cart
-        setCart({cartItems: [], cashier:"", id: 0});
+        setCart({cartItems: [], cashier:"", id: 0, total: 0});
     };
 
     const setOrder = (order: Cart) => {
         setCart(order);
     };
 
-    const getItems = () => {
-        const itemList = cart.cartItems.map((cartItems) => {
-            return cartItems;
-        });
-        return itemList;
-    };
+    const getItems = () => cart.cartItems;
 
     const value = {
         cart: cart,

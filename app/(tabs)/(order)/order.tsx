@@ -22,10 +22,10 @@ export default function OrderScreen() {
         const order: Cart = {
             id: 0,
             cartItems: cartContext.getItems(),
-            cashier: cart.cashier
+            cashier: cart.cashier,
+            total: cart.total
         };
 
-        console.log(order);
         cartContext.setOrder(order);
         router.push("/item-list");
     }
